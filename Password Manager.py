@@ -38,12 +38,13 @@ def displayUser():
             
             print (decText)
             #print(myCred)
-
+            
+        f.close()
     else:   
         print("No Password Manager file exists, please enter credentils first")
         
     print("\n\nCredentials displayed successfully !")
-    f.close()
+    
     
 #Begining of the main program 
  
