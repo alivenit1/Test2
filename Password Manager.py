@@ -12,13 +12,15 @@ def addUser():
     uName = input("Enter User name : ")
     uPassword = input("Enter User password : ")
     uURL = input("Enter URL : ")
-    clearText = uName + "\t" + uPassword + "\t" + uURL   # concatinating all the user credentials
+    clearText = uName + " " + uPassword + " " + uURL
+    #clearText = "{uName} + \"\t\t\" + {uPassword} + \"\t\t\" + uURL"   # concatinating all the user credentials
     # charSet is the base for ROT3 encryption method 
-    charSet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-=+|\}]{[\"':;?/>.<, "
+    #charSet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-=+|\}]{[\"':;?/>.<, "
     # encText is the encrypted value of the supplied credentials
-    encText = "".join([charSet[(charSet.find(c)+3)%95] for c in clearText])
+    #encText = "".join([charSet[(charSet.find(c)+3)%95] for c in clearText])
+    #REMOVED encryption on advise from code review
     f = open("myPasswordManager.txt", "a") # opening file in append mode 
-    f.write (encText + "\n") # writing  the encrypted text into text file
+    f.write (clearText + "\n") # writing  the encrypted text into text file
     f.close()
     print ("\nCredentials added successfully!")
 
@@ -29,21 +31,55 @@ def addUser():
 def displayUser(): 
     
     if os.path.exists('myPasswordManager.txt'):
-        f = open("myPasswordManager.txt", "r") # open the text file in read mode 
-        print ("Username" + "     " + "Password" + "     " + "URL")
-        for x in f:
-            encText = x
-            charSet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-=+|\}]{[\"':;?/>.<, "
-            decText = "".join([charSet[(charSet.find(c)-3)%95] for c in encText])
-            
-            print (decText)
-            #print(myCred)
-            
-        f.close()
+        #REMOVED decryption on advise from code review
+        # f = open("myPasswordManager.txt", "r") # open the text file in read mode 
+        # print ("Username" + "     " + "Password" + "     " + "URL")
+        # for x in f:
+        #     encText = x
+        #     charSet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-=+|\}]{[\"':;?/>.<, "
+        #     decText = "".join([charSet[(charSet.find(c)-3)%95] for c in encText])
+        #     print (decText)
+        #     #print(myCred)
+        # f.close()
+        f = open("myPasswordManager.txt", "r") #open file in read mode
+        #print ("I am reading now using readlines")
+        x= f.readlines() #read all lines to x
+        totalLines = len(x) # check the legth of x for iteration
+        if totalLines > 0: # check if there is atleast one line entry
+            a = 0 #assign loop variable
+            h1="UserName"
+            h2="User Password"
+            h3="URL"
+            print("=============================================================================")
+            myHeading = "{0}\t\t{1}\t\t{2}" #print header
+            print (myHeading.format(h1, h2, h3))
+            print("=============================================================================")
+            print ("\n")
+            while a < totalLines: #loop though lines
+                printVar = x[a] #load each line from file to string variable
+                #printVar = printVar.replace("\n", "") # remove new line character
+                n = printVar.split(" ") #split the string where there space and load to list
+                uName = n[0] # define string variables from list
+                uPassword = n[1]
+                uUrl = n[2]
+                if len(uName) > 8:
+                    #print("uName >8")
+                    clearText = "{0}\t\t{1}\t\t{2}" #format string 
+                elif len(uName) > 12:
+                    #print("uName >12")
+                    clearText = "{0}\t{1}\t{2}" #format string 
+                # elif len(uPassword) < 8:
+                #     #print("uPassword <8")
+                #     clearText = "{0}\t\t{1}\t\t{2}" #format string 
+                else:
+                    clearText = "{0}\t\t\t{1}\t\t{2}" #format string 
+                print (clearText.format(uName, uPassword, uUrl)) #display string in required format
+                a=a+1 #increment to read next line
+        print("\n\nCredentials displayed successfully !")
     else:   
         print("No Password Manager file exists, please enter credentils first")
         
-    print("\n\nCredentials displayed successfully !")
+    
     
     
 #Begining of the main program 
